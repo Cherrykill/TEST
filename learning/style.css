@@ -100,3 +100,43 @@ footer {
   padding: 15px;
   margin-top: 40px;
 }
+
+/* //ANCHOR: RESPONSIVE TABLE */
+@media screen and (max-width: 900px) {
+  header {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+  header nav a {
+    margin: 0 10px; /* Giãn menu ra nhẹ */
+    font-size: 14px;
+  }
+
+  /* Sản phẩm: từ 4 cột xuống còn 2 cột */
+  .product {
+    width: calc(50% - 20px); /* Chiếm 1 nửa khung trừ khoảng cách gap */
+  }
+
+  section {
+    padding: 0 10px;
+  }
+}
+
+/* //ANCHOR: RESONSIVE MOBILE  */
+@media screen and (max-width: 480px) {
+  header h1 {
+    font-size: 20px;
+  }
+  header nav a {
+    display: block;
+    margin: 5px 0;
+    font-size: 16px;
+  }
+  .product {
+    width: 100%;
+  }
+  .product img {
+    height: 200px;
+  }
+}
