@@ -11,7 +11,7 @@
     <header>
       <h1>🛒 E-commerce</h1>
       <nav>
-        <a href="/">Trang chủ</a>
+        <a href="../index.html">Trang chủ</a>
         <a href="product-detail.html">Sản phẩm</a>
         <a href="cart.html">Giỏ hàng</a>
         <a href="#">Liên hệ</a>
@@ -22,41 +22,17 @@
     <section>
       <h2>Chi tiết sản phẩm</h2>
       <div class="product-detail">
-        <img
-          src="https://picsum.photos/400/400?random=1"
-          alt="áo thun"
-          style="width: 300px; border-radius: 8px"
-        />
+        <img src="https://picsum.photos/400/400?random=1" alt="áo thun" />
         <h3>Áo thun nam Basic</h3>
-        <p style="font-size: 24px; color: #e67e22">199.000₫</p>
-        <p>
+        <p class="price">199.000₫</p>
+        <p class="description">
           Mô tả: Chất liệu cotton 100%, thoáng mát, thích hợp mặc hàng ngày.
         </p>
-        <button
-          style="
-          border: none;
-            background: #e4e0e0;
-            padding: 10px 30px;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-          "
-        >
-          <a href="/" style="text-decoration: none; color: #000000;">Quay lại</a>
-        </button>
-        <button
-          style="
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            padding: 10px 30px;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-          "
-        >
-          Thêm vào giỏ
-        </button>
+
+        <div class="actions">
+          <a href="../index.html" class="btn-secondary">Quay lại</a>
+          <button class="btn-primary">Thêm vào giỏ</button>
+        </div>
       </div>
     </section>
 
