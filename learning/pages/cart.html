@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
+    <!-- //ANCHOR: HEADER -->
+    <header>
+      <h1>🛒 E-commerce</h1>
+      <nav>
+        <a href="/">Trang chủ</a>
+        <a href="product-detail.html">Sản phẩm</a>
+        <a href="cart.html">Giỏ hàng</a>
+        <a href="#">Liên hệ</a>
+      </nav>
+    </header>
+
+    <!-- //ANCHOR: DANH SÁCH SẢN PHẨM -->
+    <section>
+      <h2>Giỏ hàng của bạn</h2>
+      <table
+        border="1"
+        cellpadding="10"
+        style="width: 100%; border-collapse: collapse"
+      >
+        <thead>
+          <tr style="background-color: #fefefe">
+            <th>Sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Đơn giản</th>
+            <th>Thành tiền</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Áo thun nam</td>
+            <td>
+              <input type="number" value="2" min="1" style="width: 60px" />
+            </td>
+            <td>199.000đ</td>
+            <td>398.000đ</td>
+            <td>
+              <button
+                style="
+                  background-color: #e74c3c;
+                  color: white;
+                  border: none;
+                  padding: 5px 10px;
+                  border-radius: 4px;
+                  cursor: pointer;
+                "
+              >
+                Xóa
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td>Áo sơ mi trắng</td>
+            <td>
+              <input type="number" value="1" min="1" style="width: 60px" />
+            </td>
+            <td>349.000₫</td>
+            <td>349.000₫</td>
+            <td>
+              <button
+                style="
+                  background-color: #e74c3c;
+                  color: white;
+                  border: none;
+                  padding: 5px 10px;
+                  border-radius: 4px;
+                  cursor: pointer;
+                "
+              >
+                Xóa
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td>Áo dài tay</td>
+            <td>
+              <input type="number" value="3" min="1" style="width: 60px" />
+            </td>
+            <td>420.000đ</td>
+            <td>390.000₫</td>
+            <td>
+              <button
+                style="
+                  background-color: #e74c3c;
+                  color: white;
+                  border: none;
+                  padding: 5px 10px;
+                  border-radius: 4px;
+                  cursor: pointer;
+                "
+              >
+                Xóa
+              </button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr style="font-weight: bold">
+            <td colspan="3" style="text-align: right">Tổng cộng</td>
+            <td>747.000đ</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+      <button
+        style="
+          background-color: #2980b9;
+          color: white;
+          border: none;
+          padding: 12px 30px;
+          border-radius: 5px;
+          margin-top: 20px;
+          font-weight: bold;
+          cursor: pointer;
+        "
+      >
+        Tiến hành thanh toán
+      </button>
+    </section>
+
+    <!-- //ANCHOR: FOOTER -->
+    <footer>
+      <p>&copy; 2026 E-commerce. All rights reserved.</p>
+    </footer>
+    <script src="../js/script.js"></script>
+  </body>
+</html>
