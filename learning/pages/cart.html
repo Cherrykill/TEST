@@ -32,49 +32,24 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Áo thun nam</td>
-            <td>
-              <input type="number" value="2" min="1" style="width: 60px" />
-            </td>
-            <td>199.000đ</td>
-            <td>398.000đ</td>
-            <td>
-              <button class="btn-danger">Xóa</button>
-            </td>
-          </tr>
-          <tr>
-            <td>Áo sơ mi trắng</td>
-            <td>
-              <input type="number" value="1" min="1" style="width: 60px" />
-            </td>
-            <td>349.000₫</td>
-            <td>349.000₫</td>
-            <td>
-              <button class="btn-danger">Xóa</button>
-            </td>
-          </tr>
-          <tr>
-            <td>Áo dài tay</td>
-            <td>
-              <input type="number" value="3" min="1" style="width: 60px" />
-            </td>
-            <td>420.000đ</td>
-            <td>1.260.000đ</td>
-            <td>
-              <button class="btn-danger">Xóa</button>
-            </td>
-          </tr>
+          <!-- Noi dung se duoc JS tao dong o day  -->
         </tbody>
         <tfoot>
           <tr class="cart-total">
-            <td colspan="3">Tổng cộng</td>
-            <td>2.007.000đ</td>
+            <td colspan="3" style="text-align: center; font-weight: bold">
+              Tổng cộng
+            </td>
+            <td id="totalAmount">2.007.000đ</td>
             <td></td>
           </tr>
         </tfoot>
       </table>
-      <button class="btn-primary">Tiến hành thanh toán</button>
+      <div class="cart-actions">
+        <button class="btn-secondary" onclick="clearCart()">
+          Xoá giỏ hàng
+        </button>
+        <button class="btn-primary">Tiến hành thanh toán</button>
+      </div>
     </section>
 
     <!-- //ANCHOR: FOOTER -->
