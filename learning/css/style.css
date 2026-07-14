@@ -278,3 +278,14 @@ footer {
   gap: 10px;
   flex-wrap: wrap;
 }
+
+/* //ANCHOR: CART BADGE  */
+.cart-badge {
+  background: #e74c3c;
+  color: #fff;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 5px;
+  display: inline-block;
+}
