@@ -30,7 +30,8 @@ function addToCart(productName, price) {
   const existingProduct = cart.find((item) => item.name === productName);
   if (existingProduct) {
     // Neu co roi thi tang so luong
-    existingProduct += 1;
+    existingProduct.quantity += 1;
+    console.log(existingProduct);
   } else {
     // Neu chua co gi thi them moi
     cart.push(product);
@@ -109,7 +110,7 @@ function displayCart() {
     totalPrice += subtotal;
 
     row.innerHTML = `
-       <td>Áo dài tay</td>
+       <td>${item.name}</td>
             <td>
               <input type="number" value="${item.quantity}" min="1" style="width: 60px" />
             </td>
@@ -132,16 +133,16 @@ function displayCart() {
 
 // ANCHOR: 8. HAM XOA 1 SAN PHAM KHOI GIO HANG
 function removeItem(index) {
-  const productName = cart[index].name
-  cart.splice(index,1) // Xoa phan tu tai vi tri index
-  saveCartToStorage()
-  displayCart()
-  updateCartCount()
+  const productName = cart[index].name;
+  cart.splice(index, 1); // Xoa phan tu tai vi tri index
+  saveCartToStorage();
+  displayCart();
+  updateCartCount();
   alert(`🗑️ Đã xóa '${productName}' khỏi giỏ hàng`);
 }
 
 // ANCHOR: TAI LAI GIO HANG KHI TRANG DUOC MO (NOI KHOI TAO APP)
-document.addEventListener('DOMContentLoaded', function(){
-  loadCartFromStorage() // Tai tu LocalStorage
-  displayCart() // Hien thi badge
-})
+document.addEventListener("DOMContentLoaded", function () {
+  loadCartFromStorage(); // Tai tu LocalStorage
+  displayCart(); // Hien thi badge
+});
