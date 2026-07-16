@@ -234,6 +234,7 @@ function renderProducts() {
     const productDiv = document.createElement("div");
     productDiv.className = "product";
     productDiv.innerHTML = `
+    <a href="./pages/product-detail.html?id=${product.id}" style="text-decoration:none;color:inherit">
     <img
             src="./assets/${product.image}"
             alt="${product.name}"
@@ -246,14 +247,57 @@ function renderProducts() {
           >
             Mua ngay
           </button>
+    </a>
     `;
     productList.appendChild(productDiv);
   });
 }
 
+// ANCHOR: 10. HAM HIEN THI CHI TIET SAN PHAM
+function renderProductDetail() {
+  // Lay id tu URL
+  const urlParam = new URLSearchParams(window.location.search);
+  const productId = parseInt(urlParam.get("id"));
+
+  // Tim san pham trong mang
+  const product = products.find((product) => product.id === productId);
+
+  const detailContainer = document.getElementById("productDetail");
+  if (!detailContainer) return;
+
+  // Neu khong tim thay san pham
+  if (!product) {
+    detailContainer.innerHTML = `
+      <div>
+        <h3>Không tìm tháy sản phẩm</h3>
+        <a href="../index.html" class="btn-secondary">Quay lại trang chủ</a>
+      </div>
+    `;
+    return;
+  }
+
+  // Hien thi chi tiet san pham
+  detailContainer.innerHTML = `
+  <img src="../assets/${product.image}" alt="áo thun" />
+        <h3>${product.name}</h3>
+        <p class="price">${product.price.toLocaleString()}₫</p>
+        <p class="description">
+          ${product.description}
+        </p>
+
+        <div class="actions">
+          <a href="../index.html" class="btn-secondary">Quay lại</a>
+          <button class="btn-primary" onclick="addToCart('${product.name}', ${product.price})">
+            Thêm vào giỏ
+          </button>
+        </div>
+  `;
+}
+
 // ANCHOR: TAI LAI GIO HANG KHI TRANG DUOC MO (NOI KHOI TAO APP)
 document.addEventListener("DOMContentLoaded", function () {
-  loadCartFromStorage(); // Tai tu LocalStorage
-  renderProducts();
-  displayCart(); // Hien thi badge
+  loadCartFromStorage(); // Tai gio hang tu LocalStorage
+  renderProducts(); // Hien thi danh sach san pham trang chu
+  displayCart(); // Hien thi badge tren header
+  renderProductDetail(); // Hien thi chi tiet san pham
 });
