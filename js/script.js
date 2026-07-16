@@ -1,5 +1,84 @@
 // ANCHOR: 1. VARIABLES
-let cart = [];
+const products = [
+  {
+    id: 1,
+    name: "Áo thun nam Basic",
+    price: 199000,
+    image: "ao-thun-nam-basic.png",
+    description: "Chất liệu cotton 100%, thoáng mát, thích hợp mặc hàng ngày.",
+  },
+  {
+    id: 2,
+    name: "Áo sơ mi trắng",
+    price: 349000,
+    image: "ao-som-mi-trang.png",
+    description: "Sơ mi công sở, form ôm, dễ phối đồ.",
+  },
+  {
+    id: 3,
+    name: "Quần jean xanh Slim Fit",
+    price: 499000,
+    image: "quan-jeans-slim-fit.png",
+    description: "Quần jean xanh ôm chân, phong cách trẻ trung.",
+  },
+  {
+    id: 4,
+    name: "Quần kaki đen",
+    price: 429000,
+    image: "quan-kaki-den.png",
+    description: "Quần kaki đen, chất vải dày dặn, mặc đi làm.",
+  },
+  {
+    id: 5,
+    name: "Áo hoodie Unisex",
+    price: 599000,
+    image: "ao-hoodie-unisex.png",
+    description: "Áo hoodie unisex, thoải mái, phong cách đường phố.",
+  },
+  {
+    id: 6,
+    name: "Áo khoác Bomber",
+    price: 799000,
+    image: "ao-khoac-bomber.png",
+    description: "Áo khoác bomber, chất vải dù, giữ ấm tốt.",
+  },
+  {
+    id: 7,
+    name: "Váy hoa mùa hè",
+    price: 459000,
+    image: "vay-hoa-mua-he.png",
+    description: "Váy hoa nhẹ nhàng, thoáng mát cho mùa hè.",
+  },
+  {
+    id: 8,
+    name: "Chân váy xếp ly",
+    price: 329000,
+    image: "chan-va-xep-ly.png",
+    description: "Chân váy xếp ly, phong cách nữ tính, thanh lịch.",
+  },
+  {
+    id: 9,
+    name: "Áo polo nam",
+    price: 289000,
+    image: "ao-polo-nam.png",
+    description: "Áo polo nam, chất liệu thấm hút mồ hôi tốt.",
+  },
+  {
+    id: 10,
+    name: "Áo len cổ lọ",
+    price: 399000,
+    image: "ao-len-co-lo.png",
+    description: "Áo len cổ lọ, giữ ấm mùa đông, phong cách lịch lãm.",
+  },
+  {
+    id: 11,
+    name: "Áo thun tay dài",
+    price: 259000,
+    image: "ao-thu-tay-dai.png",
+    description: "Áo thun tay dài, giữ ấm mùa đông, phong cách lịch lãm.",
+  },
+];
+const carts = [];
 
 // ANCHOR: 2. HAM TAI GIO HANG TU LOCALSTORAGE
 function loadCartFromStorage() {
@@ -74,6 +153,7 @@ function clearCart() {
   cart = [];
   saveCartToStorage();
   updateCartCount();
+  displayCart();
   alert("Da xoa toan bo gio hang");
 }
 
@@ -141,8 +221,39 @@ function removeItem(index) {
   alert(`🗑️ Đã xóa '${productName}' khỏi giỏ hàng`);
 }
 
+// ANCHOR: 9. HAM HIEN THI SAN PHAM LEN TRANG CHỦ
+function renderProducts() {
+  const productList = document.querySelector(".product-list");
+  if (!productList) return;
+
+  // Xoa noi dung cu
+  productList.innerHTML = "";
+
+  // Duyet qua tung san pham va tao html tuong ung
+  products.forEach((product) => {
+    const productDiv = document.createElement("div");
+    productDiv.className = "product";
+    productDiv.innerHTML = `
+    <img
+            src="./assets/${product.image}"
+            alt="${product.name}"
+          />
+          <h3>${product.name}</h3>
+          <p>${product.price.toLocaleString()}đ</p>
+          <button
+            class="btn-primary"
+            onclick="addToCart('${product.name}', ${product.price})"
+          >
+            Mua ngay
+          </button>
+    `;
+    productList.appendChild(productDiv);
+  });
+}
+
 // ANCHOR: TAI LAI GIO HANG KHI TRANG DUOC MO (NOI KHOI TAO APP)
 document.addEventListener("DOMContentLoaded", function () {
   loadCartFromStorage(); // Tai tu LocalStorage
+  renderProducts();
   displayCart(); // Hien thi badge
 });
