@@ -123,7 +123,7 @@ function addToCart(productName, price) {
   updateCartCount();
 
   // Thong bao nguoi dung
-  console.log("Giỏ hàng hiện tại:", cart); // Xem trong console để kiểm tra
+  showToast(`🛒 Đã thêm '${productName}' vào giỏ hàng`);
 }
 
 // ANCHOR: 5. HAM CAP NHAP SO LUONG HIEN THI TREN HEADER
@@ -135,7 +135,7 @@ function updateCartCount() {
   }
 
   // Tim the <a> trong "gio hang" va them badge
-  const cartLink = document.querySelector("nav a[href='cart.html']");
+  const cartLink = document.querySelector(".cart-link");
   if (cartLink) {
     // Neu da co badge roi thi cap nhap, chua co thi tao moi
     let badge = cartLink.querySelector(".cart-badge");
@@ -218,7 +218,7 @@ function removeItem(index) {
   saveCartToStorage();
   displayCart();
   updateCartCount();
-  alert(`🗑️ Đã xóa '${productName}' khỏi giỏ hàng`);
+  showToast(`🗑️ Đã xóa '${productName}' khỏi giỏ hàng`);
 }
 
 // ANCHOR: 9. HAM HIEN THI SAN PHAM LEN TRANG CHỦ
@@ -235,19 +235,15 @@ function renderProducts() {
     productDiv.className = "product";
     productDiv.innerHTML = `
     <a href="./pages/product-detail.html?id=${product.id}" style="text-decoration:none;color:inherit">
-    <img
-            src="./assets/${product.image}"
-            alt="${product.name}"
-          />
-          <h3>${product.name}</h3>
-          <p>${product.price.toLocaleString()}đ</p>
-          <button
+    <img src="./assets/${product.image}" alt="${product.name}"/></a>
+      <h3>${product.name}</h3>
+      <p>${product.price.toLocaleString()}đ</p>
+        <button
             class="btn-primary"
             onclick="addToCart('${product.name}', ${product.price})"
-          >
+        >
             Mua ngay
-          </button>
-    </a>
+        </button>
     `;
     productList.appendChild(productDiv);
   });
@@ -292,6 +288,23 @@ function renderProductDetail() {
           </button>
         </div>
   `;
+}
+
+// ANCHOR: HAM HIEN THI THONG BAO DEP HON
+function showToast(message, isError = false) {
+  // Xoa toast cu neu co
+  const oldToast = document.querySelector(".toast");
+  if (oldToast) oldToast.innerHTML = "";
+
+  const toast = document.createElement("div");
+  toast.className = `toast ${isError ? "toast-error" : ""}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  // Tu dong bien mat sau 2.5s
+  setTimeout(() => {
+    toast.remove();
+  }, 2500);
 }
 
 // ANCHOR: TAI LAI GIO HANG KHI TRANG DUOC MO (NOI KHOI TAO APP)

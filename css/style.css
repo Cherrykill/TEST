@@ -16,6 +16,10 @@ header {
   background: #d35400;
   color: #fff;
 }
+header h1 a{
+  text-decoration: none;
+  color: #fff;
+}
 header h1 {
   font-size: 1.6rem;
 }
@@ -288,4 +292,69 @@ footer {
   font-weight: bold;
   margin-left: 5px;
   display: inline-block;
+}
+
+/* //ANCHOR: HIEU UNG CHUYEN TRANG MUOT MA  */
+.product {
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
+}
+.product:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* ANCHOR: HIEU UNG CHO NUT  */
+.btn-primary,
+.btn-secondary,
+.btn-danger {
+  transition: all 0.3s ease;
+}
+.btn-primary:active,
+.btn-secondary:active,
+.btn-danger:active {
+  transform: scale(0.95);
+}
+
+/* //ANCHOR: RESPONSIVE CHO BANG GIO HANG  */
+@media screen and (max-width: 576px) {
+  .cart-table th,
+  .cart-table td {
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+  .cart-table input[type="number"] {
+    width: 40px;
+  }
+}
+
+/* //ANCHOR: THONG BAO TOAST */
+.toast {
+  position: fixed;
+  top: 30px;
+  right: 20px;
+  background-color: #27ae60;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  animation: slideIn 0.3s ease;
+}
+
+.toast-error {
+  background: #e74c3c;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
