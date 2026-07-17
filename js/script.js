@@ -169,7 +169,7 @@ function displayCart() {
   if (cart.length === 0) {
     cartTable.innerHTML = `
     <tr>
-      <td colspan="5" style="text-align:center; padding: 30px; color:#999">Gio hang cua ban dang trong</td>
+      <td colspan="5" style="text-align:center; padding: 30px; color:#999">Giỏ hàng của bạn đang trống</td>
     </tr>
     `;
 
