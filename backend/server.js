@@ -117,6 +117,21 @@ app.put("/cart/:id", async (req, res) => {
   }
 });
 
+// ANCHOR: DELETE CART (phai dat TRUOC /cart/:id)
+app.delete("/cart/clear", async (req, res) => {
+  try {
+    const { error } = await supabase
+      .from("carts")
+      .delete()
+      .eq("user_id", TEMP_USER_ID);
+
+    if (error) throw error;
+    res.json({ success: true, message: "Da xoa toan bo gio hang" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // ANCHOR: DELETE ITEM IN CART
 app.delete("/cart/:id", async (req, res) => {
   try {
@@ -130,21 +145,6 @@ app.delete("/cart/:id", async (req, res) => {
 
     if (error) throw error;
     res.json({ success: true, message: "Da xoa san pham khoi gio hang" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// ANCHOR: DELETE CART
-app.delete("/cart/clear", async (req, res) => {
-  try {
-    const { error } = await supabase
-      .from("carts")
-      .delete()
-      .eq("user_id", TEMP_USER_ID);
-
-    if (error) throw error;
-    res.json({ success: true, message: "Da xoa toan bo gio hang" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

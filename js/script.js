@@ -1,293 +1,286 @@
-// ANCHOR: 1. VARIABLES
-const products = [
-  {
-    id: 1,
-    name: "Áo thun nam Basic",
-    price: 199000,
-    image: "ao-thun-nam-basic.png",
-    description: "Chất liệu cotton 100%, thoáng mát, thích hợp mặc hàng ngày.",
-  },
-  {
-    id: 2,
-    name: "Áo sơ mi trắng",
-    price: 349000,
-    image: "ao-som-mi-trang.png",
-    description: "Sơ mi công sở, form ôm, dễ phối đồ.",
-  },
-  {
-    id: 3,
-    name: "Quần jean xanh Slim Fit",
-    price: 499000,
-    image: "quan-jeans-slim-fit.png",
-    description: "Quần jean xanh ôm chân, phong cách trẻ trung.",
-  },
-  {
-    id: 4,
-    name: "Quần kaki đen",
-    price: 429000,
-    image: "quan-kaki-den.png",
-    description: "Quần kaki đen, chất vải dày dặn, mặc đi làm.",
-  },
-  {
-    id: 5,
-    name: "Áo hoodie Unisex",
-    price: 599000,
-    image: "ao-hoodie-unisex.png",
-    description: "Áo hoodie unisex, thoải mái, phong cách đường phố.",
-  },
-  {
-    id: 6,
-    name: "Áo khoác Bomber",
-    price: 799000,
-    image: "ao-khoac-bomber.png",
-    description: "Áo khoác bomber, chất vải dù, giữ ấm tốt.",
-  },
-  {
-    id: 7,
-    name: "Váy hoa mùa hè",
-    price: 459000,
-    image: "vay-hoa-mua-he.png",
-    description: "Váy hoa nhẹ nhàng, thoáng mát cho mùa hè.",
-  },
-  {
-    id: 8,
-    name: "Chân váy xếp ly",
-    price: 329000,
-    image: "chan-va-xep-ly.png",
-    description: "Chân váy xếp ly, phong cách nữ tính, thanh lịch.",
-  },
-  {
-    id: 9,
-    name: "Áo polo nam",
-    price: 289000,
-    image: "ao-polo-nam.png",
-    description: "Áo polo nam, chất liệu thấm hút mồ hôi tốt.",
-  },
-  {
-    id: 10,
-    name: "Áo len cổ lọ",
-    price: 399000,
-    image: "ao-len-co-lo.png",
-    description: "Áo len cổ lọ, giữ ấm mùa đông, phong cách lịch lãm.",
-  },
-  {
-    id: 11,
-    name: "Áo thun tay dài",
-    price: 259000,
-    image: "ao-thu-tay-dai.png",
-    description: "Áo thun tay dài, giữ ấm mùa đông, phong cách lịch lãm.",
-  },
-];
-const carts = [];
+// ANCHOR: VARIABLES
+const API_BASE_URL = "http://localhost:3000";
 
-// ANCHOR: 2. HAM TAI GIO HANG TU LOCALSTORAGE
-function loadCartFromStorage() {
-  const storedCart = localStorage.getItem("shoppingCart");
-  if (storedCart) {
-    cart = JSON.parse(storedCart); // Chuyen chuoi JSON thanh mang
-  } else {
-    cart = []; // Reset mang hoan toan dam bao mang rong
-  }
-  updateCartCount(); // Cap nhap hien thi
-}
+// ANCHOR: --- CART ---
+// ANCHOR: ADD TO CART
+async function addToCart(productId) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/cart`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ product_id: productId, quantity: 1 }),
+    });
 
-// ANCHOR: 3. HAM LUU GIO HANG VAO LOCALSTORAGE
-function saveCartToStorage() {
-  localStorage.setItem("shoppingCart", JSON.stringify(cart)); // Chuyen mang thanh chuoi JSON
-}
+    if (!response.ok) throw new Error("Không thể thêm vào giỏ hàng");
 
-// ANCHOR: 4. HAM THEM SAN PHAM VAO GIO HANG
-function addToCart(productName, price) {
-  // Tao doi tuong san pham
-  const product = {
-    name: productName,
-    price: price,
-    quantity: 1,
-  };
+    const data = await response.json();
 
-  // Kiem tra xem san pham da co trong gio chua
-  const existingProduct = cart.find((item) => item.name === productName);
-  if (existingProduct) {
-    // Neu co roi thi tang so luong
-    existingProduct.quantity += 1;
-    console.log(existingProduct);
-  } else {
-    // Neu chua co gi thi them moi
-    cart.push(product);
-  }
+    // Cập nhật badge
+    await updateCartCount();
 
-  // Lưu vào LocalStorage
-  saveCartToStorage();
+    // Hiển thị thông báo
+    showToast(`🛒 Đã thêm sản phẩm vào giỏ hàng!`);
 
-  // Cap nhap hien thi
-  updateCartCount();
-
-  // Thong bao nguoi dung
-  showToast(`🛒 Đã thêm '${productName}' vào giỏ hàng`);
-}
-
-// ANCHOR: 5. HAM CAP NHAP SO LUONG HIEN THI TREN HEADER
-function updateCartCount() {
-  // Tinh tong so san pham (cong don quantity)
-  let totalItem = 0;
-  for (let i = 0; i < cart.length; i++) {
-    totalItem += cart[i].quantity;
-  }
-
-  // Tim the <a> trong "gio hang" va them badge
-  const cartLink = document.querySelector(".cart-link");
-  if (cartLink) {
-    // Neu da co badge roi thi cap nhap, chua co thi tao moi
-    let badge = cartLink.querySelector(".cart-badge");
-    if (!badge) {
-      badge = document.createElement("span"); // TTao phan tu span
-      badge.className = "cart-badge"; // Gan class cho phan tu span
-      cartLink.appendChild(badge); // Nhet phan tu span vao cartLink
+    // Nếu đang ở trang giỏ hàng, cập nhật lại bảng
+    if (document.querySelector(".cart-table")) {
+      displayCart();
     }
-    badge.textContent = totalItem > 0 ? totalItem : ""; // Neu gio hang <= 0 se k hien thi gi ca
+  } catch (error) {
+    console.error("Lỗi thêm vào giỏ:", error);
+    showToast(`❌ ${error.message}`, true);
   }
 }
 
-// ANCHOR: 6. HAM XOA TOAN BO GIO HANG (DUNG SAU THANH TOAN)
-function clearCart() {
-  cart = [];
-  saveCartToStorage();
-  updateCartCount();
-  displayCart();
-  alert("Da xoa toan bo gio hang");
+// ANCHOR: UPDATE QUANTITY
+async function updateQuantity(cartId, newQuantity) {
+  if (newQuantity < 1) return;
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/cart/${cartId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ quantity: parseInt(newQuantity) }),
+    });
+
+    if (!response.ok) throw new Error("Không thể cập nhật số lượng");
+
+    await displayCart(); // Cập nhật lại bảng
+    await updateCartCount(); // Cập nhật badge
+  } catch (error) {
+    console.error("Lỗi cập nhật số lượng:", error);
+    showToast(`❌ ${error.message}`, true);
+  }
 }
 
-// ANCHOR: 7. HAM HIEN THI GIO HANG TREN TRANG cart.html
-function displayCart() {
+// ANCHOR: UPDATE CART COUNT (BADGE)
+async function updateCartCount() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/cart`);
+    if (!response.ok) throw new Error("Không thể lấy giỏ hàng");
+
+    const cartItems = await response.json();
+
+    // Tính tổng số sản phẩm
+    let totalItems = 0;
+    cartItems.forEach((item) => {
+      totalItems += item.quantity;
+    });
+
+    // Cập nhật badge
+    const cartLink = document.querySelector('nav a[href="cart.html"]');
+    if (cartLink) {
+      let badge = cartLink.querySelector(".cart-badge");
+      if (!badge) {
+        badge = document.createElement("span");
+        badge.className = "cart-badge";
+        cartLink.appendChild(badge);
+      }
+      badge.textContent = totalItems > 0 ? totalItems : "";
+    }
+  } catch (error) {
+    console.error("Lỗi cập nhật badge:", error);
+  }
+}
+
+// ANCHOR: REMOVE ITEM
+async function removeItem(cartId) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/cart/${cartId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) throw new Error("Không thể xóa sản phẩm");
+
+    await displayCart();
+    await updateCartCount();
+    showToast("🗑️ Đã xóa sản phẩm khỏi giỏ hàng");
+  } catch (error) {
+    console.error("Lỗi xóa sản phẩm:", error);
+    showToast(`❌ ${error.message}`, true);
+  }
+}
+
+// ANCHOR: CLEAR CART
+async function clearCart() {
+  if (!confirm("Bạn có chắc muốn xóa toàn bộ giỏ hàng?")) return;
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/cart/clear`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) throw new Error("Không thể xóa giỏ hàng");
+
+    await displayCart();
+    await updateCartCount();
+    showToast("🧹 Đã xóa toàn bộ giỏ hàng");
+  } catch (error) {
+    console.error("Lỗi xóa giỏ hàng:", error);
+    showToast(`❌ ${error.message}`, true);
+  }
+}
+
+// ANCHOR: DISPLAY CART
+async function displayCart() {
   const cartTable = document.querySelector(".cart-table tbody");
   if (!cartTable) return;
 
-  // Xoa tat ca noi dung cu
-  cartTable.innerHTML = "";
+  try {
+    // Gọi API lấy giỏ hàng
+    const response = await fetch(`${API_BASE_URL}/cart`);
+    if (!response.ok) throw new Error("Không thể lấy giỏ hàng");
 
-  // Neu gio hang rong
-  if (cart.length === 0) {
-    cartTable.innerHTML = `
-    <tr>
-      <td colspan="5" style="text-align:center; padding: 30px; color:#999">Giỏ hàng của bạn đang trống</td>
-    </tr>
-    `;
+    const cartItems = await response.json();
 
-    // Cap nhap tong tien ve 0
-    const totalElement = document.querySelector(".cart-total");
-    if (totalElement) {
-      const td = totalElement.querySelector("td:last-child"); // Tim cai the <td> o cuoi cung khong co noi dung gi
-      if (td) td.textContent = "0đ";
+    // Xóa nội dung cũ
+    cartTable.innerHTML = "";
+
+    // Nếu giỏ hàng rỗng
+    if (cartItems.length === 0) {
+      cartTable.innerHTML = `
+        <tr>
+          <td colspan="5" style="text-align:center; padding:30px; color:#999;">
+            🛒 Giỏ hàng của bạn đang trống
+          </td>
+        </tr>
+      `;
+      updateCartTotal(0);
+      return;
     }
-    return;
-  }
 
-  // Hien thi tung san pham
-  let totalPrice = 0;
-  cart.forEach((item, index) => {
-    const row = document.createElement("tr"); // Tao the <tr> chua html
-    const subtotal = item.price * item.quantity;
-    totalPrice += subtotal;
+    // Hiển thị từng sản phẩm
+    let totalPrice = 0;
+    cartItems.forEach((item) => {
+      const product = item.products;
+      const subtotal = product.price * item.quantity;
+      totalPrice += subtotal;
 
-    row.innerHTML = `
-       <td>${item.name}</td>
-            <td>
-              <input type="number" value="${item.quantity}" min="1" style="width: 60px" />
-            </td>
-            <td>${item.price.toLocaleString()}đ</td>
-            <td>${subtotal.toLocaleString()}đ</td>
-            <td>
-              <button class="btn-danger" onclick="removeItem(${index})">Xóa</button>
-            </td>
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${product.name}</td>
+        <td>
+          <input type="number" value="${item.quantity}" min="1" 
+                 onchange="updateQuantity(${item.id}, this.value)" style="width:60px;">
+        </td>
+        <td>${product.price.toLocaleString()}₫</td>
+        <td>${subtotal.toLocaleString()}₫</td>
+        <td>
+          <button class="btn-danger" onclick="removeItem(${item.id})">Xóa</button>
+        </td>
+      `;
+      cartTable.appendChild(row);
+    });
+
+    // Cập nhật tổng tiền
+    updateCartTotal(totalPrice);
+  } catch (error) {
+    console.error("Lỗi hiển thị giỏ hàng:", error);
+    cartTable.innerHTML = `
+      <tr>
+        <td colspan="5" style="text-align:center; padding:30px; color:red;">
+          ❌ Lỗi tải giỏ hàng: ${error.message}
+        </td>
+      </tr>
     `;
-    cartTable.appendChild(row); // Them row vao cartTable
-  });
+  }
+}
 
-  // Cap nhap tong tien
+// ANCHOR: UPDATE CART TOTAL
+function updateCartTotal(total) {
   const totalElement = document.querySelector(".cart-total");
   if (totalElement) {
     const td = totalElement.querySelector("td:last-child");
-    if (td) td.textContent = totalPrice.toLocaleString() + "đ";
+    if (td) td.textContent = total.toLocaleString() + "₫";
   }
 }
 
-// ANCHOR: 8. HAM XOA 1 SAN PHAM KHOI GIO HANG
-function removeItem(index) {
-  const productName = cart[index].name;
-  cart.splice(index, 1); // Xoa phan tu tai vi tri index
-  saveCartToStorage();
-  displayCart();
-  updateCartCount();
-  showToast(`🗑️ Đã xóa '${productName}' khỏi giỏ hàng`);
-}
-
-// ANCHOR: 9. HAM HIEN THI SAN PHAM LEN TRANG CHỦ
-function renderProducts() {
+// ANCHOR: --- PRODUCT ---
+// ANCHOR: RENDER PRODUCTS (TRANG CHU)
+async function renderProducts() {
   const productList = document.querySelector(".product-list");
   if (!productList) return;
 
-  // Xoa noi dung cu
-  productList.innerHTML = "";
+  try {
+    const response = await fetch(`${API_BASE_URL}/products`);
+    if (!response.ok) throw new Error("Không thể lấy danh sách sản phẩm");
 
-  // Duyet qua tung san pham va tao html tuong ung
-  products.forEach((product) => {
-    const productDiv = document.createElement("div");
-    productDiv.className = "product";
-    productDiv.innerHTML = `
-    <a href="./pages/product-detail.html?id=${product.id}" style="text-decoration:none;color:inherit">
-    <img src="./assets/${product.image}" alt="${product.name}"/></a>
-      <h3>${product.name}</h3>
-      <p>${product.price.toLocaleString()}đ</p>
-        <button
-            class="btn-primary"
-            onclick="addToCart('${product.name}', ${product.price})"
-        >
-            Mua ngay
-        </button>
-    `;
-    productList.appendChild(productDiv);
-  });
+    const products = await response.json();
+
+    productList.innerHTML = "";
+    products.forEach((product) => {
+      const productDiv = document.createElement("div");
+      productDiv.className = "product";
+      productDiv.innerHTML = `
+        <a href="./pages/product-detail.html?id=${product.id}" style="text-decoration:none;color:inherit">
+          <img src="./assets/${product.image}" alt="${product.name}" />
+        </a>
+        <h3>${product.name}</h3>
+        <p>${product.price.toLocaleString()}₫</p>
+        <button class="btn-primary" onclick="addToCart(${product.id})">Mua ngay</button>
+      `;
+      productList.appendChild(productDiv);
+    });
+  } catch (error) {
+    console.error("Lỗi render sản phẩm:", error);
+    productList.innerHTML = `<p style="color:red">Lỗi tải sản phẩm: ${error.message}</p>`;
+  }
 }
 
-// ANCHOR: 10. HAM HIEN THI CHI TIET SAN PHAM
-function renderProductDetail() {
-  // Lay id tu URL
-  const urlParam = new URLSearchParams(window.location.search);
-  const productId = parseInt(urlParam.get("id"));
-
-  // Tim san pham trong mang
-  const product = products.find((product) => product.id === productId);
+// ANCHOR: RENDER PRODUCT DETAIL
+async function renderProductDetail() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const productId = urlParams.get("id");
 
   const detailContainer = document.getElementById("productDetail");
   if (!detailContainer) return;
 
-  // Neu khong tim thay san pham
-  if (!product) {
+  if (!productId) {
     detailContainer.innerHTML = `
-      <div>
-        <h3>Không tìm tháy sản phẩm</h3>
+      <div style="text-align:center; padding:40px;">
+        <h3>❌ Không tìm thấy sản phẩm</h3>
         <a href="../index.html" class="btn-secondary">Quay lại trang chủ</a>
       </div>
     `;
     return;
   }
 
-  // Hien thi chi tiet san pham
-  detailContainer.innerHTML = `
-  <img src="../assets/${product.image}" alt="áo thun" />
-        <h3>${product.name}</h3>
-        <p class="price">${product.price.toLocaleString()}₫</p>
-        <p class="description">
-          ${product.description}
-        </p>
+  try {
+    // Gọi API lấy tất cả sản phẩm và tìm theo id
+    const response = await fetch(`${API_BASE_URL}/products`);
+    if (!response.ok) throw new Error("Không thể lấy dữ liệu sản phẩm");
 
-        <div class="actions">
-          <a href="../index.html" class="btn-secondary">Quay lại</a>
-          <button class="btn-primary" onclick="addToCart('${product.name}', ${product.price})">
-            Thêm vào giỏ
-          </button>
+    const products = await response.json();
+    const product = products.find((p) => p.id === parseInt(productId));
+
+    if (!product) {
+      detailContainer.innerHTML = `
+        <div style="text-align:center; padding:40px;">
+          <h3>❌ Không tìm thấy sản phẩm</h3>
+          <a href="../index.html" class="btn-secondary">Quay lại trang chủ</a>
         </div>
-  `;
+      `;
+      return;
+    }
+
+    detailContainer.innerHTML = `
+      <img src="../assets/${product.image || "aothun.png"}" alt="${product.name}">
+      <h3>${product.name}</h3>
+      <p class="price">${product.price.toLocaleString()}₫</p>
+      <p class="description">${product.description || "Chưa có mô tả"}</p>
+      <div class="actions">
+        <a href="../index.html" class="btn-secondary">Quay lại</a>
+        <button class="btn-primary" onclick="addToCart(${product.id})">Thêm vào giỏ</button>
+      </div>
+    `;
+  } catch (error) {
+    console.error("Lỗi render chi tiết:", error);
+    detailContainer.innerHTML = `
+      <div style="text-align:center; padding:40px; color:red;">
+        <h3>❌ Lỗi tải sản phẩm: ${error.message}</h3>
+        <a href="../index.html" class="btn-secondary">Quay lại trang chủ</a>
+      </div>
+    `;
+  }
 }
 
 // ANCHOR: HAM HIEN THI THONG BAO DEP HON
@@ -307,10 +300,21 @@ function showToast(message, isError = false) {
   }, 2500);
 }
 
-// ANCHOR: TAI LAI GIO HANG KHI TRANG DUOC MO (NOI KHOI TAO APP)
-document.addEventListener("DOMContentLoaded", function () {
-  loadCartFromStorage(); // Tai gio hang tu LocalStorage
-  renderProducts(); // Hien thi danh sach san pham trang chu
-  displayCart(); // Hien thi badge tren header
-  renderProductDetail(); // Hien thi chi tiet san pham
+// ANCHOR: DOM CONTENT LOADED
+document.addEventListener("DOMContentLoaded", async function () {
+  // Chỉ gọi các hàm phù hợp với trang hiện tại
+  if (document.querySelector(".product-list")) {
+    await renderProducts();
+  }
+
+  if (document.getElementById("productDetail")) {
+    await renderProductDetail();
+  }
+
+  if (document.querySelector(".cart-table")) {
+    await displayCart();
+  }
+
+  // Luôn cập nhật badge
+  await updateCartCount();
 });
